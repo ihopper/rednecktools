@@ -23,12 +23,12 @@ public class MainFrame extends JFrame implements ActionListener {
 		FlowLayout flo = new FlowLayout();
 		setLayout(flo);
 
-		// Add the inteface controls
+		// Add the intefrace controls
 		cboScan = new JComboBox();
-			cboScan.addItem("Whois");
-			cboScan.addItem("Ping");
-			cboScan.addItem("Scan");
-			cboScan.addItem("Traceroute");
+			cboScan.addItem("Hoodat"); // Whois
+			cboScan.addItem("Yoohoo"); // Ping
+			cboScan.addItem("Wutdis"); // Port Scan
+			cboScan.addItem("Weredey"); // Traceroute
 		add(cboScan);
 
 		lblURL = new JLabel("Lookup Address:");
@@ -57,6 +57,20 @@ public class MainFrame extends JFrame implements ActionListener {
 	
 	public void actionPerformed(ActionEvent event) {
 		txtResults.setText("Performing " + cboScan.getSelectedItem() + " on host: " + txtURL.getText() + "\n");
+		
+		String actionType = cboScan.getSelectedItem().toString();
+		String domain = txtURL.getText();
+		String serverReply = null;
+		
+		if(actionType == "Hoodat") {
+			try {
+				serverReply = hoodat.executeQuery(domain);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				txtResults.setText(e.toString());
+			}
+			txtResults.setText(serverReply); 
+		}
 	}
 
 	public static void main(String[] args) {

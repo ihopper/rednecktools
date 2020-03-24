@@ -8,16 +8,17 @@ import java.net.*;
 
 
 public class hoodat {
-
-	public static void main(String[] args) throws Exception {
+	
+	public static String executeQuery(String domain) throws Exception {
 		
 		//Initialize variables and store arguments
-		String domainName 	= args[0];
-		String whoisServer	= "whois.verisign-grs.com";
-		int port			= 43;
+		String domainName 		= domain;
+		String whoisServer		= "whois.verisign-grs.com";
+		int port				= 43;
+		String serverResponse 	= null;
 
 		//Update the user
-		System.out.println("*** Performing Whois Lookup on " + domainName + " ***");
+		serverResponse = "*** Performing Whois Lookup on " + domainName + " ***\n";
 
 		//Connect to the server
 		Socket socket = new Socket(whoisServer, port);
@@ -37,11 +38,13 @@ public class hoodat {
 		String line = null;
 
 		//debug
-		System.out.println("DEBUG: " + (line = reader.readLine()));
+		//System.out.println("DEBUG: " + (line = reader.readLine()));
 
 		//Read the response
 		while((line = reader.readLine()) != null) {
-			System.out.println(line);
+			//System.out.println(line);
+			// Build the return string
+			serverResponse = serverResponse + line + "\n";
 		}
 
 		//Close the socket and streams
@@ -50,8 +53,9 @@ public class hoodat {
 		socket.close();
 
 		//Notify the user
-		System.out.println("*** Connection closed by client ***");
-
+		//System.out.println("*** Connection closed by client ***");
+		return serverResponse;
+		
 	}//end main
 
 }//end class
