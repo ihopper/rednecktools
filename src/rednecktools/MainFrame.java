@@ -16,8 +16,10 @@ public class MainFrame extends JFrame implements ActionListener {
 	public MainFrame() {
 		// Setup the frame
 		super("Redneck Networking Tools 1.0");
-		setSize(800, 450);
+		setSize(720, 425);
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 
 		// Set the control layout
 		FlowLayout flo = new FlowLayout();
@@ -31,13 +33,13 @@ public class MainFrame extends JFrame implements ActionListener {
 			cboScan.addItem("Weredey"); // Traceroute
 		add(cboScan);
 
-		lblURL = new JLabel("Lookup Address:");
+		lblURL = new JLabel("Address:");
 		add(lblURL);
 
 		txtURL = new JTextField(30);
 		add(txtURL);
 
-		btnLookup = new JButton("Lookup");
+		btnLookup = new JButton("Go");
 		btnLookup.addActionListener(this);
 		add(btnLookup);
 
@@ -50,6 +52,9 @@ public class MainFrame extends JFrame implements ActionListener {
 					JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollResults);
+		
+		// Set the default action for <enter> key to press the button
+		getRootPane().setDefaultButton(btnLookup);
 		
 		// Make the frame visible
 		setVisible(true);
