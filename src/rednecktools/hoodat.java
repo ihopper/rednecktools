@@ -9,14 +9,21 @@ import java.net.*;
 
 public class hoodat {
 	
-	public static String executeQuery(String domain) throws Exception {
+	// Initialize variables
+	static String domainName;
+	final static String whoisServer	= "whois.verisign-grs.com";
+	final static int port			= 43;
+	static String serverResponse	= null;
+	
+	public hoodat (String domain) {
 		
-		//Initialize variables and store arguments
-		String domainName 		= domain;
-		String whoisServer		= "whois.verisign-grs.com";
-		int port				= 43;
-		String serverResponse 	= null;
-
+		//Initialize the hoodat object
+		domainName = domain;
+		
+	}
+	
+	public String executeQuery() throws Exception {
+		
 		//Update the user
 		serverResponse = "*** Performing Whois Lookup on " + domainName + " ***\n";
 

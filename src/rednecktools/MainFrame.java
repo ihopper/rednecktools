@@ -61,20 +61,31 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent event) {
+		txtResults.setText("");
 		txtResults.setText("Performing " + cboScan.getSelectedItem() + " on host: " + txtURL.getText() + "\n");
 		
 		String actionType = cboScan.getSelectedItem().toString();
-		String domain = txtURL.getText();
+		String domain = txtURL.getText().toString();
 		String serverReply = null;
 		
 		if(actionType == "Hoodat") {
 			try {
-				serverReply = hoodat.executeQuery(domain);
+				// Instantiate a new hoodat object and initialize
+				hoodat scanner = new hoodat(domain);
+				serverReply = scanner.executeQuery();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				txtResults.setText(e.toString());
 			}
 			txtResults.setText(serverReply); 
+		} else if (actionType == "Wutdis") {
+			try {
+				// Instantiate a new wutdis object and initialize
+				wutdis scanner = new wutdis(domain, 1, 10, this);
+				scanner.scan();
+			} catch (Exception e) {
+				txtResults.setText(e.toString());
+			}
 		}
 	}
 

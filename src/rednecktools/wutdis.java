@@ -6,22 +6,32 @@ import java.net.Socket;
 
 public class wutdis {
 
-	// Initialize variables
-	private static int startPort 	= 0; //Begin the scan at port 0, unless otherwise specified.
-	private static int endPort		= 100; //End the scan at port 10,000, unless otherwise specified. 
-	private static String target	= ""; //The target server.
+	// Declare variables
+	static int startPort 	= 0; // Begin the scan at port 0, unless otherwise specified.
+	static int endPort		= 100; // End the scan at port 10,000, unless otherwise specified. 
+	static String target	= null; // The target server.
+	static String serverResponse	= null; // The server response string.
+	static MainFrame window; // Variable to receive the window object.
 	
-	public wutdis(String target, int startPort, int endPort) throws IOException {
+	public wutdis(String host, int start, int end, MainFrame frame) throws IOException {
+		
+		// Initialize variables
+		target		= host;
+		startPort	= start;
+		endPort		= end;
+		window		= frame;
+	}
+	
+	public void scan() {
 		
 		int currentPort = startPort;
 		
 		// Update the user
-		System.out.println("*** Performing scan on " + target + " ***\n");
-
+		window.txtResults.setText("*** Performing scan on " + target + " ***\n");
+		
 		// Run the scan loop
-		// TODO Add multi-thread support
 		for(int count = currentPort; count <= endPort; count++) {		
-			
+		
 			// Connect to the server
 			try(Socket socket = new Socket(target, currentPort)) {
 		
@@ -34,7 +44,7 @@ public class wutdis {
 		
 				// Read the response and display it for the user.
 				while((line = reader.readLine()) != null && (line = reader.readLine()) != "") {
-					System.out.println(target + ":" + currentPort + " (open) -> " + line);
+					window.txtResults.append(target + ":" + currentPort + " (open) -> " + line + "\n");
 				}
 				
 				// Close the socket and stream
@@ -44,66 +54,22 @@ public class wutdis {
 			// Throw errors	
 			} catch (UnknownHostException ex) {
 				 
-	            System.out.println("Server not found: " + ex.getMessage());
+	          window.txtResults.append("Server not found: " + ex.getMessage());
 	 
 	        } catch (IOException ex) {
 	        	// In the event of an IOException, the port is unreachable (i.e. closed).
-	            System.out.println(target + ":" + currentPort + " (closed) ");
+	        	window.txtResults.append(target + ":" + currentPort + " (closed)\n");
 	        }// End try/catch
 			
 			// Advance the port counter
 			currentPort++;
 			
 		}// End for loop
+
 		// Notify the user that the scan is complete
-		System.out.println("\n*** Scan completed ***");
+		window.txtResults.append("\n\n*** Scan completed ***");
 		
-	}// End constructor
+	}// End 
 
-	static void showHelp() {
-		// Print the help message
-		System.out.println("Usage: \n"
-				+ "\twutdis [target] [starting port] [ending port]\n\n"
-				+ "Scans a range of port numbers on the target host and reports open ports/services.\n"
-				+ "If no port numbers are given the scan range defaults to 0 to 100.\n");
-	}
-	
-	public static void main(String[] args) throws IOException {
-		// Check for input and parse the arguments, if they exist.
-		if(args.length != 0) {
-			target	= args[0];
-		} else {
-			showHelp();
-			System.exit(0);
-		}
-		
-		// Get the starting port
-		if(args.length >= 2) {
-			try{
-				startPort = Integer.parseInt(args[1]);
-			} 
-			catch(NumberFormatException ex) {
-				System.out.println("ERROR: Starting port must be an integer.\n");
-				showHelp();
-				System.exit(0);
-			};
-		}
-		
-		// Get the ending port
-		if(args.length >= 3) {
-			try {
-				endPort = Integer.parseInt(args[2]);
-			} 
-			catch(NumberFormatException ex) {
-				System.out.println("ERROR: Ending port must be an integer.\n");
-				showHelp();
-				System.exit(0);
-			};
-		}
-		
-		// Call the constructor
-		wutdis scanner = new wutdis(target, startPort, endPort);
-
-	}// End main
 
 }// End class
