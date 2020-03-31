@@ -23,9 +23,9 @@ public class hoodat {
 	}
 	
 	public String executeQuery() throws Exception {
-		
+	
 		//Update the user
-		serverResponse = "*** Performing Whois Lookup on " + domainName + " ***\n";
+		serverResponse = "*** Performing Whois Lookup on " + domainName + " ***\n\n";
 
 		//Connect to the server
 		Socket socket = new Socket(whoisServer, port);

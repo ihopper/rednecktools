@@ -23,11 +23,14 @@ public class wutdis {
 	}
 	
 	public void scan() {
-		
 		int currentPort = startPort;
+		String msg		= null;
+		String repl 	= "repl";
+		String append	= "append";
 		
 		// Update the user
-		window.txtResults.setText("*** Performing scan on " + target + " ***\n");
+		msg = "*** Performing scan on " + target + " ***\n\n";
+		window.updateUser(msg, repl);
 		
 		// Run the scan loop
 		for(int count = currentPort; count <= endPort; count++) {		
@@ -44,7 +47,8 @@ public class wutdis {
 		
 				// Read the response and display it for the user.
 				while((line = reader.readLine()) != null && (line = reader.readLine()) != "") {
-					window.txtResults.append(target + ":" + currentPort + " (open) -> " + line + "\n");
+					msg = target + ":" + currentPort + " (open) -> " + line + "\n";
+					window.updateUser(msg, append);
 				}
 				
 				// Close the socket and stream
@@ -53,12 +57,13 @@ public class wutdis {
 				
 			// Throw errors	
 			} catch (UnknownHostException ex) {
-				 
-	          window.txtResults.append("Server not found: " + ex.getMessage());
+				msg = "Server not found: " + ex.getMessage();
+				window.updateUser(msg, append);
 	 
 	        } catch (IOException ex) {
 	        	// In the event of an IOException, the port is unreachable (i.e. closed).
-	        	window.txtResults.append(target + ":" + currentPort + " (closed)\n");
+	        	msg = target + ":" + currentPort + " (closed)\n";
+	        	window.updateUser(msg, append);
 	        }// End try/catch
 			
 			// Advance the port counter
@@ -67,7 +72,8 @@ public class wutdis {
 		}// End for loop
 
 		// Notify the user that the scan is complete
-		window.txtResults.append("\n\n*** Scan completed ***");
+		msg = "\n*** Scan completed ***";
+		window.updateUser(msg, append);
 		
 	}// End 
 

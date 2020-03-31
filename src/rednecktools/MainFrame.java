@@ -11,7 +11,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	JLabel lblURL;
 	JTextField txtURL;
 	JButton btnLookup;
-	JTextArea txtResults;
+	static JTextArea txtResults;
 
 	public MainFrame() {
 		// Setup the frame
@@ -19,13 +19,12 @@ public class MainFrame extends JFrame implements ActionListener {
 		setSize(720, 425);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 
 		// Set the control layout
 		FlowLayout flo = new FlowLayout();
 		setLayout(flo);
 
-		// Add the intefrace controls
+		// Add the interface controls
 		cboScan = new JComboBox();
 			cboScan.addItem("Hoodat"); // Whois
 			cboScan.addItem("Yoohoo"); // Ping
@@ -60,35 +59,50 @@ public class MainFrame extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 	
+	// Check for button click, then do something
 	public void actionPerformed(ActionEvent event) {
-		txtResults.setText("");
-		txtResults.setText("Performing " + cboScan.getSelectedItem() + " on host: " + txtURL.getText() + "\n");
-		
-		String actionType = cboScan.getSelectedItem().toString();
-		String domain = txtURL.getText().toString();
-		String serverReply = null;
+		String msg			= null;
+		String repl 		= "repl";
+		String append		= "append";	
+		String actionType 	= cboScan.getSelectedItem().toString();
+		String domain 		= txtURL.getText().toString();
+		String serverReply 	= null;
 		
 		if(actionType == "Hoodat") {
 			try {
 				// Instantiate a new hoodat object and initialize
 				hoodat scanner = new hoodat(domain);
-				serverReply = scanner.executeQuery();
+				msg = scanner.executeQuery();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				txtResults.setText(e.toString());
-			}
-			txtResults.setText(serverReply); 
+				msg = e.toString();
+				this.updateUser(msg, append);
+			}		
+			// Update the user
+			this.updateUser(msg, append);
+			
 		} else if (actionType == "Wutdis") {
 			try {
 				// Instantiate a new wutdis object and initialize
 				wutdis scanner = new wutdis(domain, 1, 10, this);
 				scanner.scan();
 			} catch (Exception e) {
-				txtResults.setText(e.toString());
+				msg = e.toString();
+				this.updateUser(msg, append);
 			}
 		}
 	}
 
+	// Method for updating the results window
+	// method types: append, repl
+	public void updateUser(String msg, String method) {	
+		if(method == "repl") {
+			txtResults.setText(msg);
+		} else if(method == "append") {
+			txtResults.append(msg);
+		}
+	}
+	
 	public static void main(String[] args) {
 		// Instantiate the window object
 		MainFrame window = new MainFrame();
