@@ -7,7 +7,7 @@ import java.awt.event.*;
 public class MainFrame extends JFrame implements ActionListener {
 
 	// Initialize objects
-	JComboBox cboScan;
+	JComboBox<String> cboScan;
 	JLabel lblURL;
 	JTextField txtURL;
 	JButton btnLookup;
@@ -25,7 +25,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		setLayout(flo);
 
 		// Add the interface controls
-		cboScan = new JComboBox();
+		cboScan = new JComboBox<String>();
 			cboScan.addItem("Hoodat"); // Whois
 			cboScan.addItem("Yoohoo"); // Ping
 			cboScan.addItem("Wutdis"); // Port Scan
